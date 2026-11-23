@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nimbus Cement — Climate Exposure v1</title>
+<style>
+:root{--ink:#14110f;--ink2:#5a5450;--ink3:#8a8179;--line:#e4e0d8;--bg:#faf8f5;--card:#fff;--accent:#1f5f8b;--warn:#b4620a;--good:#2f6b3a;--bad:#9e3326;--guess:#6a4a86}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:15px}
+.wrap{max-width:1060px;margin:0 auto;padding:40px 24px 80px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+h1{font-size:26px;font-weight:500;margin:6px 0 4px}
+h2{font-size:17px;font-weight:500;margin:0 0 4px}
+.sub{color:var(--ink2);font-size:14px}
+.hero{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 30px;margin:26px 0 20px}
+.big{font-family:ui-serif,Georgia,serif;font-size:50px;line-height:1.05;font-variant-numeric:tabular-nums}
+.heroflex{display:flex;gap:44px;flex-wrap:wrap;align-items:flex-end}
+.rangeline{font-size:13px;color:var(--ink2);margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.ctl{margin-bottom:16px}
+.ctlhead{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;margin-bottom:5px}
+.ctlval{font-variant-numeric:tabular-nums;font-weight:500}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:7px;vertical-align:1px}
+.d-strong{background:var(--good)}
+.d-weak{background:var(--warn)}
+.d-guess{background:var(--guess)}
+.key{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--ink3);margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+.key span{display:flex;align-items:center;gap:6px}
+.key i{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
+.note{font-size:12px;color:var(--ink3);margin-top:4px;line-height:1.45}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-weight:500;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);padding:0 10px 8px;border-bottom:1px solid var(--line)}
+th.n,td.n{text-align:right;font-variant-numeric:tabular-nums}
+td{padding:11px 10px;border-bottom:1px solid var(--line)}
+tr.row{cursor:pointer}
+tr.row:hover{background:#f6f3ee}
+tr.row.sel{background:#eef3f7}
+.pname{font-weight:500}
+.pmeta{font-size:12px;color:var(--ink3)}
+.pill{font-size:11px;padding:1px 7px;border-radius:9px;border:1px solid var(--line);color:var(--ink2)}
+.bar{height:7px;border-radius:4px;background:#e9e5dd;overflow:hidden;min-width:60px}
+.bar>i{display:block;height:100%;background:var(--accent)}
+.sec{margin-top:40px}
+.drawer{background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:18px 20px;margin-top:14px;font-size:14px}
+.drawer h3{font-size:15px;font-weight:500;margin-bottom:10px}
+.calc{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;background:#f6f3ee;border-radius:7px;padding:10px 12px;margin:8px 0;white-space:pre-wrap;line-height:1.7}
+a{color:var(--accent)}
+.src{font-size:12px;color:var(--ink2);line-height:1.6}
+ol.asm{font-size:13px;color:var(--ink2);padding-left:20px;line-height:1.65}
+ol.asm li{margin-bottom:7px}
+.flag{border-left:3px solid var(--warn);background:#fdf8f1;padding:11px 14px;border-radius:0 7px 7px 0;font-size:13px;margin-top:12px}
+.flag b{font-weight:500}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;padding:7px 13px;font-size:13px;cursor:pointer;color:var(--ink2);font-family:inherit}
+.seg button.on{background:var(--ink);color:#fff}
+.chartbox{position:relative;height:330px;margin-top:14px}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--ink2);margin-bottom:6px;flex-wrap:wrap}
+.legend span{display:flex;align-items:center;gap:5px}
+.sw{width:10px;height:10px;border-radius:2px;display:inline-block}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<p class="eyebrow">Nimbus Cement Ltd · climate exposure · v1 prototype</p>
+<h1>Nimbus Cement's exposure to climate events</h1>
+<p class="sub">Revenue at risk across nine plants, comparing today's climate (ten-year average, 2015–24) with 2040's (2036–45).</p>
+
+<div class="hero">
+  <div class="heroflex">
+    <div>
+      <p class="eyebrow">Today's climate (2015–24)</p>
+      <p class="big" id="hNow">—</p>
+      <p class="sub" id="hNowPct">—</p>
+      <p class="note">Ten-year climate average applied to FY 2025-26 revenue</p>
+    </div>
+    <div>
+      <p class="eyebrow">2040 climate (2036–45)</p>
+      <p class="big" id="hFut" style="color:var(--bad)">—</p>
+      <p class="sub" id="hFutPct">—</p>
+      <p class="note">Ten-year climate average applied to FY 2025-26 revenue</p>
+    </div>
+    <div>
+      <p class="eyebrow">Change</p>
+      <p class="big" id="hDelta">—</p>
+      <p class="sub">increase in annual exposure</p>
+    </div>
+  </div>
+  <p class="rangeline" id="hRange">—</p>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h2>Damage rules</h2>
+    <p class="note" style="margin-bottom:14px">Each rule converts weather into lost production. Edit any of them; everything recalculates.</p>
+
+    <div class="ctl">
+      <div class="ctlhead"><span>Output lost per °C of warming<span class="dot d-strong" title="Strong evidence"></span></span><span class="ctlval"><span id="vHeat">2.5</span>%</span></div>
+      <input type="range" id="sHeat" min="1" max="5" step="0.1" value="2.5">
+      <p class="note">Peer-reviewed panel of ~70,000 Indian factories: plant output falls about 2–3% per °C, worker productivity 2–4% per °C.</p>
+    </div>
+
+    <div class="ctl">
+      <div class="ctlhead"><span>Days lost per heavy-rain day<span class="dot d-weak" title="Weak evidence"></span></span><span class="ctlval"><span id="vFlood">5</span> d</span></div>
+      <input type="range" id="sFlood" min="0" max="15" step="1" value="5">
+      <p class="note">No study exists. Derived from reported Indian plant shutdowns (3M Ahmedabad, Ambattur, Ludhiana, 2023–26), which ran 2–10 days. Treat as indicative.</p>
+    </div>
+
+    <div class="ctl">
+      <div class="ctlhead"><span>Water-curtailment days, groundwater plant<span class="dot d-weak" title="Weak evidence"></span></span><span class="ctlval"><span id="vWater">8</span> d/yr</span></div>
+      <input type="range" id="sWater" min="0" max="25" step="1" value="8">
+      <p class="note">No published frequency data. Judgement default, informed by iFOREST: groundwater's share of cement withdrawals in stressed regions rose 27%→38% in a year, and ~70% of Rajasthan's groundwater units are over-exploited. Surface-water plants get 3 days; desalinated, 0.</p>
+    </div>
+
+    <div class="ctl">
+      <div class="ctlhead"><span>Clinker stockpile at grinding units<span class="dot d-guess" title="Our assumption"></span></span><span class="ctlval"><span id="vStock">10</span> d</span></div>
+      <input type="range" id="sStock" min="0" max="30" step="1" value="10">
+      <p class="note">Not in the source data. A grinding unit keeps running on its clinker pile while its supplier is down, so it only loses the days left over after the pile runs out.</p>
+    </div>
+
+    <div class="key">
+      <span><i style="background:var(--good)"></i>Strong evidence — peer-reviewed study</span>
+      <span><i style="background:var(--warn)"></i>Weak evidence — press reports, industry data</span>
+      <span><i style="background:var(--guess)"></i>Our assumption — no source, judgement</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Climate model</h2>
+    <p class="note" style="margin-bottom:12px">Open-Meteo serves one high-emissions pathway only, so these are three models of the same future, not three futures. Disagreement between them is the honest uncertainty range.</p>
+    <div class="seg" id="segModel">
+      <button data-m="mean" class="on">Mean of 3</button>
+      <button data-m="mri">MRI (Japan)</button>
+      <button data-m="ec">EC-Earth</button>
+      <button data-m="mpi">MPI (Germany)</button>
+    </div>
+    <div class="flag" style="margin-top:16px">
+      <b>Models disagree sharply.</b> Durgapur warms +1.23 °C under MRI and +0.05 °C under MPI. Chittorgarh ranks worst in all three, which is why it is the one finding worth acting on.
+    </div>
+    <div class="flag">
+      <b>Heat shows ₹0 today by design.</b> The heat rule measures loss relative to today's climate, so today's heat cost already sits inside normal operating results.
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2>Revenue at risk by plant</h2>
+  <p class="sub">Ranked by 2040 exposure. Click any row to see the full calculation and its sources.</p>
+  <table style="margin-top:14px">
+    <thead><tr>
+      <th>Plant</th><th>Type</th><th class="n">Δ temp</th><th class="n">Today</th><th class="n">2040</th><th class="n">% of plant revenue</th><th style="width:110px"></th>
+    </tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div id="drawer"></div>
+</div>
+
+<div class="sec">
+  <h2>What drives each plant's 2040 exposure</h2>
+  <div class="legend">
+    <span><span class="sw" style="background:#2a78d6"></span>Heat</span>
+    <span><span class="sw" style="background:#1baf7a"></span>Flood</span>
+    <span><span class="sw" style="background:#eda100"></span>Water</span>
+    <span><span class="sw" style="background:#e87ba4"></span>Clinker supply</span>
+  </div>
+  <div class="chartbox"><canvas id="c1" role="img" aria-label="Stacked bar chart of 2040 revenue at risk per plant, split into heat, flood, water and clinker supply."></canvas></div>
+</div>
+
+<div class="sec">
+  <h2>Today vs 2040</h2>
+  <div class="legend">
+    <span><span class="sw" style="background:#c3c2b7"></span>Today</span>
+    <span><span class="sw" style="background:#9e3326"></span>2040</span>
+  </div>
+  <div class="chartbox"><canvas id="c2" role="img" aria-label="Grouped bar chart comparing revenue at risk today and in 2040 for each plant."></canvas></div>
+</div>
+
+<div class="sec">
+  <h2>Concentration risk</h2>
+  <div class="card" style="margin-top:12px">
+    <p>Three of the nine plants have no kiln. P07 Mundra takes all its clinker from P01 Chittorgarh; P08 Paradip and P09 Durgapur take theirs from P06 Baloda Bazar.</p>
+    <p style="margin-top:10px"><b style="font-weight:500">₹2,597 cr of revenue — 28% of the company — depends on P01 Chittorgarh</b>, a groundwater-fed plant in the Indian state with the highest share of over-exploited groundwater units. Mundra's own water supply is desalinated and scores zero risk, which makes it look safe in isolation. It is not.</p>
+    <div class="flag" style="margin-top:14px"><b>Propagation is a tail risk, not a central estimate.</b> At the default 10-day stockpile, nothing propagates: P01 loses about 10 disrupted days a year and the buffer absorbs them. But the model treats those days as one continuous outage. In reality they are scattered — a hot spell in May, a flood day in July — and scattered days are far easier to absorb. Drag the stockpile slider below 10 to see where it starts to bite.</div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2>Assumptions</h2>
+  <ol class="asm">
+    <li><b>Climate data</b> — Open-Meteo Climate API (CMIP6 HighResMIP downscaled to 10 km), models MRI-AGCM3-2-S, EC-Earth3P-HR, MPI-ESM1-2-XR. Baseline 2015–24, future 2036–45. <a href="https://docs.google.com/spreadsheets/d/13tI7C3SrpDdYR0LbvWQkjj90Tyf6naPy8wxxhYAsimA/edit?usp=sharing" target="_blank" rel="noopener">Source sheet with formulas</a>.</li>
+    <li><b>Why a ten-year window.</b> A single year reflects weather, not climate. Both periods are ten-year averages so the comparison isolates the climate signal rather than one year's variability.</li>
+    <li><b>Coordinates snapped to grid.</b> The API returns the nearest land cell, up to ~5 km from the plant. Chandrapur was requested at 19.96, 79.30 and returned at 20.00, 79.30.</li>
+    <li><b>Heat</b> — output loss = rate × (mean daily-max 2036–45 − mean daily-max 2015–24). Negative warming is floored at zero.</li>
+    <li><b>Flood</b> — a heavy-rain day is over 100 mm, between IMD's "heavy" (64.5–115.5 mm) bands. This metric is fragile: MRI sees 0.3–1.7 such days a year, the other two models almost none.</li>
+    <li><b>Water</b> — base days by source (groundwater 8, surface 3, desalinated 0), scaled by rainfall change at 2× sensitivity, then by plant type.</li>
+    <li><b>Plant type</b> — grinding units carry 25% of a kiln's water risk. A kiln without cooling water stops; a grinding mill largely does not. The 25% is judgement, not a measured figure.</li>
+    <li><b>Clinker stockpile: 10 days</b> (editable). Days lost by a grinding unit = supplier's disrupted days − stockpile days, never below zero.</li>
+    <li><b>Revenue per day</b> = FY 2025-26 revenue ÷ 365. Output held flat to 2040; no demand growth, no price change, no discounting.</li>
+    <li><b>All plants assumed to operate as they do today</b>, with no adaptation investment.</li>
+  </ol>
+</div>
+
+<div class="sec">
+  <h2>Not in v1</h2>
+  <div class="grid">
+    <div class="card"><h2 style="font-size:15px">Cyclone and sea level</h2><p class="note">P07 Mundra and P08 Paradip are coastal: ₹1,130 cr of assets, ₹1,384 cr of revenue. Open-Meteo carries no cyclone data. Would need IBTrACS tracks or ISRO Bhuvan layers.</p></div>
+    <div class="card"><h2 style="font-size:15px">Transport between plants</h2><p class="note">Clinker moves P01→P07 by rail and P06→P08/P09. Floods and cyclones cut rail, road and port links as well as plants, so a grinding unit can be stranded while both ends run. Needs network flood data over each corridor.</p></div>
+    <div class="card"><h2 style="font-size:15px">Transition risk</h2><p class="note">The carbon half: CCTS intensity targets, carbon price paths, CBAM. Material for cement, but a different question from "climate events".</p></div>
+    <div class="card"><h2 style="font-size:15px">Asset damage</h2><p class="note">This model prices lost production, not repair or write-off. A cyclone that destroys a grinding unit is an asset loss and does not appear here.</p></div>
+    <div class="card"><h2 style="font-size:15px">Percentile flood threshold</h2><p class="note">A fixed 100 mm cut-off inherits each model's rainfall bias. Using each site's wettest 1% of days would make the metric comparable across models.</p></div>
+    <div class="card"><h2 style="font-size:15px">Disruption timing</h2><p class="note">Annual disrupted days are tested against the stockpile as one block. Daily simulation would place them through the year and give a truer propagation figure.</p></div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2>Sources</h2>
+  <p class="src">
+    <b style="font-weight:500">Working data</b> — <a href="https://docs.google.com/spreadsheets/d/13tI7C3SrpDdYR0LbvWQkjj90Tyf6naPy8wxxhYAsimA/edit?usp=sharing" target="_blank" rel="noopener">Open the climate summary sheet</a>: raw daily output from Open-Meteo for all nine plants, both periods, three models, with the formulas used to reduce it to the figures on this page.<br>
+    Climate data — <a href="https://open-meteo.com/en/docs/climate-api" target="_blank" rel="noopener">Open-Meteo Climate API</a>, CMIP6 HighResMIP. CC-BY 4.0.<br>
+    Heat and output — Somanathan, Somanathan, Sudarshan &amp; Tewari, <a href="https://www.journals.uchicago.edu/doi/full/10.1086/713733" target="_blank" rel="noopener">The Impact of Temperature on Productivity and Labor Supply: Evidence from Indian Manufacturing</a>, Journal of Political Economy.<br>
+    Flood downtime — reported shutdowns at <a href="https://www.business-standard.com/india-news/after-the-deluge-ambattur-industrial-estate-limps-back-to-normalcy-123120700905_1.html" target="_blank" rel="noopener">Ambattur industrial estate</a> and 3M India Ahmedabad, 2023–26.<br>
+    Cement water use — <a href="https://indiancementreview.com/2022/12/navigating-the-water-crisis/" target="_blank" rel="noopener">Indian Cement Review / NCB</a>: ~0.5 kl per tonne of cement.<br>
+    Groundwater stress — <a href="https://www.business-standard.com/industry/news/india-s-cement-sector-cuts-energy-use-but-worker-safety-worsens-report-126102901080_1.html" target="_blank" rel="noopener">iFOREST assessment of 18 cement companies</a> across 107 BRSR indicators.<br>
+    Plant data — nimbus_cement_plants.csv, FY 2025-26.
+  </p>
+</div>
+
+<footer>v1 prototype · built for the Oren product assessment</footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const P=[
+{id:"P01",name:"Chittorgarh",state:"Rajasthan",type:"Integrated",water:"Groundwater",rev:1749,asset:3200,supplies:["P07"]},
+{id:"P02",name:"Satna",state:"Madhya Pradesh",type:"Integrated",water:"Reservoir",rev:1511,asset:2700,supplies:[]},
+{id:"P03",name:"Chandrapur",state:"Maharashtra",type:"Integrated",water:"River",rev:1248,asset:2300,supplies:[]},
+{id:"P04",name:"Nalgonda",state:"Telangana",type:"Integrated",water:"Groundwater",rev:999,asset:1800,supplies:[]},
+{id:"P05",name:"Ariyalur",state:"Tamil Nadu",type:"Integrated",water:"Groundwater",rev:868,asset:1500,supplies:[]},
+{id:"P06",name:"Baloda Bazar",state:"Chhattisgarh",type:"Integrated",water:"Canal",rev:1275,asset:2350,supplies:["P08","P09"]},
+{id:"P07",name:"Mundra",state:"Gujarat",type:"Grinding unit",water:"Desalinated",rev:848,asset:650,supplies:[],from:"P01"},
+{id:"P08",name:"Paradip",state:"Odisha",type:"Grinding unit",water:"Municipal",rev:536,asset:480,supplies:[],from:"P06"},
+{id:"P09",name:"Durgapur",state:"West Bengal",type:"Grinding unit",water:"River",rev:624,asset:470,supplies:[],from:"P06"}];
+
+const D={
+mri:[[31.84186,62.4,0.4,730.99,32.24082,60.2,0.9,772.87],[31.22822,59.8,0.3,1050.40,31.53134,60.0,0.6,1078.57],[33.33162,70.3,1.7,1327.25,33.95845,72.8,2.1,1521.02],[32.99844,49.9,0.8,905.27,33.77900,63.0,0.8,810.65],[34.08620,43.9,0.3,823.78,34.43077,52.6,0.4,857.41],[32.22387,63.7,0.5,1422.53,32.67279,60.2,1.2,1586.44],[32.10378,11.6,0.3,379.74,32.94136,14.6,0.4,376.32],[30.12924,3.2,0.8,1600.90,30.90964,3.4,0.3,1337.93],[30.51470,30.5,0.9,1516.07,31.74498,41.8,0.0,1234.45]],
+ec:[[31.75393,44.9,0.0,635.84,32.06449,54.1,0.1,610.49],[31.01476,46.8,0.1,1028.25,31.24610,50.8,0.0,938.37],[33.44780,68.8,0.0,1137.90,33.46710,66.7,0.2,1271.08],[33.12784,45.1,0.0,790.16,32.96794,43.7,0.0,955.31],[33.65341,26.5,0.0,872.85,34.05311,33.7,0.0,870.57],[32.20263,60.0,0.1,1384.02,32.28388,56.7,0.1,1478.17],[32.07607,3.2,0.1,458.88,32.24922,8.6,0.2,517.30],[30.25459,7.3,0.0,1536.46,30.23063,8.3,0.1,1578.17],[30.61785,24.3,0.0,1437.77,30.69102,21.2,0.2,1381.49]],
+mpi:[[31.46964,46.6,0.0,707.19,32.41363,53.1,0.0,663.29],[30.65010,38.6,0.0,1035.76,31.32247,40.5,0.0,987.87],[33.15568,44.8,0.0,1213.46,33.38281,38.9,0.1,1298.07],[32.98245,40.4,0.0,728.06,33.59395,46.4,0.0,767.89],[33.84172,13.8,0.0,655.29,34.72803,24.5,0.0,572.17],[31.73085,29.6,0.0,1507.80,31.95918,26.9,0.0,1566.29],[32.08423,7.0,0.0,411.41,32.81087,8.3,0.0,457.46],[30.02234,0.0,0.7,1617.08,30.61169,0.0,0.5,1673.12],[30.40542,10.6,0.0,1342.03,30.45152,0.0,0.0,1415.90]]};
+
+const MODELS=["mri","ec","mpi"];
+let model="mean", sel=null, ch1=null, ch2=null;
+const S={heat:2.5,flood:5,water:8,stock:10};
+const idx=id=>P.findIndex(p=>p.id===id);
+const fmt=n=>"₹"+n.toFixed(0)+" cr";
+
+function row(i,m){const r=D[m][i];return{bT:r[0],bR:r[2],bRain:r[3],fT:r[4],fR:r[6],fRain:r[7]};}
+function avg(i){const a=MODELS.map(m=>row(i,m));const k=x=>a.reduce((s,v)=>s+v[x],0)/3;
+  return{bT:k("bT"),bR:k("bR"),bRain:k("bRain"),fT:k("fT"),fR:k("fR"),fRain:k("fRain")};}
+function clim(i,m){return m==="mean"?avg(i):row(i,m);}
+
+function baseWater(p){const g=p.water==="Groundwater";const d=p.water==="Desalinated"?0:(g?S.water:3);
+  return d*(p.type==="Grinding unit"?0.25:1);}
+
+function calc(m){
+  const c=P.map((p,i)=>{
+    const z=clim(i,m), rpd=p.rev/365;
+    const dT=Math.max(0,z.fT-z.bT);
+    const heat=p.rev*(S.heat/100)*dT;
+    const fdN=z.bR*S.flood, fdF=z.fR*S.flood;
+    const wN=baseWater(p);
+    const rainCh=z.bRain>0?(z.fRain-z.bRain)/z.bRain:0;
+    const wF=Math.max(0,wN*(1-2*rainCh));
+    return{p,dT,heat,fdN,fdF,wN,wF,rpd,floodN:fdN*rpd,floodF:fdF*rpd,waterN:wN*rpd,waterF:wF*rpd,prop:0,propD:0};
+  });
+  c.forEach(x=>{
+    if(!x.p.from)return;
+    const s=c[idx(x.p.from)];
+    const supD=s.fdF+s.wF;
+    const d=Math.max(0,supD-S.stock);
+    x.propD=d; x.prop=d*x.rpd;
+  });
+  c.forEach(x=>{x.now=x.floodN+x.waterN; x.fut=x.heat+x.floodF+x.waterF+x.prop;});
+  return c;
+}
+
+function render(){
+  const c=calc(model);
+  const now=c.reduce((s,x)=>s+x.now,0), fut=c.reduce((s,x)=>s+x.fut,0);
+  const totRev=P.reduce((s,p)=>s+p.rev,0);
+  hNow.textContent=fmt(now); hFut.textContent=fmt(fut);
+  hNowPct.textContent=(now/totRev*100).toFixed(1)+"% of group revenue";
+  hFutPct.textContent=(fut/totRev*100).toFixed(1)+"% of group revenue";
+  hDelta.textContent="+"+Math.round((fut/now-1)*100)+"%";
+  const sums=MODELS.map(m=>calc(m).reduce((s,x)=>s+x.fut,0));
+  hRange.textContent="Across the three climate models, 2040 exposure ranges from "+fmt(Math.min(...sums))+" to "+fmt(Math.max(...sums))+". Group revenue FY 2025-26: ₹"+totRev.toLocaleString("en-IN")+" cr.";
+
+  const sorted=[...c].sort((a,b)=>b.fut-a.fut), max=sorted[0].fut;
+  tbody.innerHTML=sorted.map(x=>`<tr class="row${sel===x.p.id?" sel":""}" data-id="${x.p.id}">
+    <td><div class="pname">${x.p.id} ${x.p.name}</div><div class="pmeta">${x.p.state} · ${x.p.water}</div></td>
+    <td><span class="pill">${x.p.type==="Integrated"?"Kiln":"Grinding"}</span></td>
+    <td class="n">+${x.dT.toFixed(2)}°</td>
+    <td class="n">${fmt(x.now)}</td>
+    <td class="n" style="font-weight:500">${fmt(x.fut)}</td>
+    <td class="n">${(x.fut/x.p.rev*100).toFixed(1)}%</td>
+    <td><div class="bar"><i style="width:${x.fut/max*100}%"></i></div></td></tr>`).join("");
+  [...tbody.querySelectorAll("tr")].forEach(tr=>tr.onclick=()=>{sel=sel===tr.dataset.id?null:tr.dataset.id;render();});
+
+  drawer.innerHTML="";
+  if(sel){
+    const x=c[idx(sel)], z=clim(idx(sel),model);
+    drawer.innerHTML=`<div class="drawer"><h3>${x.p.id} ${x.p.name} — how ${fmt(x.fut)} is calculated</h3>
+<div class="calc">heat   = revenue × rate × Δtemp
+       = ₹${x.p.rev} cr × ${S.heat}% × ${x.dT.toFixed(2)}°C = ₹${x.heat.toFixed(1)} cr
+flood  = ${z.fR.toFixed(2)} heavy-rain days/yr × ${S.flood} days each × ₹${x.rpd.toFixed(2)} cr/day = ₹${x.floodF.toFixed(1)} cr
+water  = ${x.wF.toFixed(1)} curtailment days × ₹${x.rpd.toFixed(2)} cr/day = ₹${x.waterF.toFixed(1)} cr
+         (base ${x.wN.toFixed(1)} d for ${x.p.water.toLowerCase()}${x.p.type==="Grinding unit"?", ×0.25 grinding unit":""}; rainfall ${((z.fRain-z.bRain)/z.bRain*100).toFixed(1)}%)
+${x.p.from?`supply = clinker from ${x.p.from}: ${(c[idx(x.p.from)].fdF+c[idx(x.p.from)].wF).toFixed(1)} disrupted days − ${S.stock} d stockpile = ${x.propD.toFixed(1)} d → ₹${x.prop.toFixed(1)} cr`:"supply = no clinker dependency"}
+───────────────────────────────
+total  = ₹${x.fut.toFixed(1)} cr/yr  (${(x.fut/x.p.rev*100).toFixed(1)}% of plant revenue)</div>
+<p class="note">Climate inputs (${model==="mean"?"mean of 3 models":model.toUpperCase()}): mean daily max ${z.bT.toFixed(2)}°C → ${z.fT.toFixed(2)}°C · heavy-rain days ${z.bR.toFixed(2)} → ${z.fR.toFixed(2)}/yr · annual rainfall ${z.bRain.toFixed(0)} → ${z.fRain.toFixed(0)} mm. Baseline 2015–24, future 2036–45, Open-Meteo CMIP6. <a href="https://docs.google.com/spreadsheets/d/13tI7C3SrpDdYR0LbvWQkjj90Tyf6naPy8wxxhYAsimA/edit?usp=sharing" target="_blank" rel="noopener">Verify in the source sheet</a>.</p>
+${x.p.supplies.length?`<div class="flag"><b>Supplies clinker to ${x.p.supplies.join(" and ")}.</b> A long outage here propagates downstream once their stockpile runs out. Combined revenue exposed: ₹${(x.p.rev+x.p.supplies.reduce((s,q)=>s+P[idx(q)].rev,0)).toLocaleString("en-IN")} cr.</div>`:""}</div>`;
+  }
+
+  const lab=sorted.map(x=>x.p.id), opt={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:"#8a8179"}},y:{stacked:true,grid:{color:"#e4e0d8"},ticks:{color:"#8a8179",callback:v=>"₹"+v}}}};
+  const ds=[["Heat","heat","#2a78d6"],["Flood","floodF","#1baf7a"],["Water","waterF","#eda100"],["Supply","prop","#e87ba4"]]
+    .map(([l,k,col])=>({label:l,data:sorted.map(x=>+x[k].toFixed(1)),backgroundColor:col,borderRadius:3,maxBarThickness:36}));
+  if(ch1)ch1.destroy();
+  ch1=new Chart(c1,{type:"bar",data:{labels:lab,datasets:ds},options:opt});
+  if(ch2)ch2.destroy();
+  ch2=new Chart(c2,{type:"bar",data:{labels:lab,datasets:[
+    {label:"Today",data:sorted.map(x=>+x.now.toFixed(1)),backgroundColor:"#c3c2b7",borderRadius:3,maxBarThickness:18},
+    {label:"2040",data:sorted.map(x=>+x.fut.toFixed(1)),backgroundColor:"#9e3326",borderRadius:3,maxBarThickness:18}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:"#8a8179"}},y:{grid:{color:"#e4e0d8"},ticks:{color:"#8a8179",callback:v=>"₹"+v}}}}});
+}
+
+[["sHeat","vHeat","heat"],["sFlood","vFlood","flood"],["sWater","vWater","water"],["sStock","vStock","stock"]]
+.forEach(([s,v,k])=>{const el=document.getElementById(s);el.oninput=()=>{S[k]=+el.value;document.getElementById(v).textContent=el.value;render();};});
+[...segModel.querySelectorAll("button")].forEach(b=>b.onclick=()=>{
+  [...segModel.querySelectorAll("button")].forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");model=b.dataset.m;render();});
+render();
+</script>
+</body>
+</html>
